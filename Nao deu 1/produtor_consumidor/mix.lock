@@ -1,0 +1,3 @@
+%{
+  "queue": {:hex, :queue, "0.1.0", "becfd0f88d5cc6f74051c7e7f5935e8912dfd4ba0a090c3b2262e9b7e4b16685", [:mix], [], "hexpm", "a47c675e1d7e5d67789109021d46f702650b0820e015bb976d51f59559a5493a"},
+}

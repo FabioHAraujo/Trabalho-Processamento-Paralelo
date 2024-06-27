@@ -1,0 +1,50 @@
+salvar
+defmodule ProducerConsumer.Producer do
+  @type op_number :: integer
+  @type item_type :: :type1 | :type2
+  @type producer_name :: :produtor1 | :produtor2
+  @type cache_item :: %{op: String.t(), tipo: item_type, produtor: producer_name}
+
+  def start_producers() do
+    IO.puts("Iniciando produtores...")
+    start_producer(:produtor1, :type1, 3500)
+    start_producer(:produtor2, :type2, 7500)
+  end
+
+  defp start_producer(producer_name, item_type, production_time) do
+    Task.async(fn -> producer_loop(producer_name, item_type, production_time) end)
+  end
+
+  defp producer_loop(producer_name, item_type, production_time) do
+    Enum.each(1..10, fn op_number ->
+      start_time = :os.system_time(:second)
+      op = format_op_number(op_number)
+      IO.puts("OP: #{op} - Iniciado às #{format_timestamp()} pelo #{producer_name} produzindo #{item_type}")
+
+      :timer.sleep(production_time)
+
+      end_time = :os.system_time(:second)
+      IO.puts("OP: #{op} - Finalizado às #{format_timestamp()} pelo #{producer_name} produzindo #{item_type}")
+
+      cache_item = %{op: op, tipo: item_type, produtor: producer_name}
+      store_in_cache(cache_item)
+    end)
+  end
+
+  defp format_op_number(op_number) do
+    String.pad_leading(Integer.to_string(op_number), 8, "0")
+  end
+
+  defp format_timestamp() do
+    {{_, _, _}, {hour, min, sec}} = :calendar.universal_time()
+    "#{hour}:#{min}:#{sec}"
+  end
+
+  defp store_in_cache(cache_item) do
+    # Aqui você poderia implementar a lógica para armazenar o item no cache
+    IO.inspect(cache_item, label: "Item armazenado no cache")
+  end
+end
+
+# Início da execução
+ProducerConsumer.Producer.start_producers()
